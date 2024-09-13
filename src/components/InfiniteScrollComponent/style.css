@@ -1,0 +1,23 @@
+.infinite-scroll-component__outerdiv {
+  width: 100%;
+  overflow: hidden;
+}
+
+.infinite-scroll-component::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 10px;
+}
+
+.infinite-scroll-component::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.infinite-scroll-component::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #888;
+}
+
+.infinite-scroll-component::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

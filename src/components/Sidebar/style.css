@@ -1,0 +1,11 @@
+.selected {
+  border-right: 5px solid white;
+  background-color: gray;
+  transition: all 0.3s ease-in-out;
+}
+
+.selected-light {
+  border-right: 5px solid rgb(48, 44, 44);
+  background-color: gray;
+  transition: all 0.3s ease-in-out;
+}

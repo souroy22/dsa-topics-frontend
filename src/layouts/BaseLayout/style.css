@@ -1,0 +1,7 @@
+.base-layout-container {
+  width: 100svw;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  gap: 30px;
+}
