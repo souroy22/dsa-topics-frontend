@@ -3,10 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 import FallBack from "../components/FallBack";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import QuestionsList from "../pages/QuestionsList";
-
+const Login = lazy(() => import("../pages/Login"));
+const Signup = lazy(() => import("../pages/Signup"));
+const QuestionsList = lazy(() => import("../pages/QuestionsList"));
 const HomePage = lazy(() => import("../pages/Home"));
 
 const RouterComponent = () => {

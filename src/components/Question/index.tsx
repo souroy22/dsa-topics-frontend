@@ -18,6 +18,8 @@ import {
   Youtube,
 } from "lucide-react";
 import { SiLeetcode } from "react-icons/si";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 type PropTypes = {
   question: QUESTION_TYPE;
@@ -36,6 +38,8 @@ const Question: FC<PropTypes> = ({
   handleUpdateStatus,
   onClickUpdate,
 }) => {
+  const { user } = useSelector((state: RootState) => state.userReducer);
+
   return (
     <Card
       key={question.slug}
@@ -105,31 +109,35 @@ const Question: FC<PropTypes> = ({
               }}
             />
           </Tooltip>
-          <IconButton
-            aria-label="delete"
-            sx={{ ml: 1 }}
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-            }}
-          >
-            <Tooltip title="Edit" arrow>
-              <SquarePen
-                size={20}
-                color="#FFFF00"
-                onClick={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  onClickUpdate(question.slug, question.title);
-                }}
-              />
-            </Tooltip>
-          </IconButton>
-          <IconButton aria-label="delete" sx={{ ml: 1 }}>
-            <Tooltip title="Delete" arrow>
-              <Trash2 size={20} color="#990000" />
-            </Tooltip>
-          </IconButton>
+          {user?.role === "ADMIN" && (
+            <IconButton
+              aria-label="delete"
+              sx={{ ml: 1 }}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+              }}
+            >
+              <Tooltip title="Edit" arrow>
+                <SquarePen
+                  size={20}
+                  color="#FFFF00"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    onClickUpdate(question.slug, question.title);
+                  }}
+                />
+              </Tooltip>
+            </IconButton>
+          )}
+          {user?.role === "ADMIN" && (
+            <IconButton aria-label="delete" sx={{ ml: 1 }}>
+              <Tooltip title="Delete" arrow>
+                <Trash2 size={20} color="#990000" />
+              </Tooltip>
+            </IconButton>
+          )}
         </Box>
       </CardContent>
     </Card>

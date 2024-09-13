@@ -5,6 +5,7 @@ export type USER_TYPE = {
   lastName: string;
   email: string;
   avatar: string | null;
+  role: "ADMIN" | "USER";
 };
 
 type UserStateType = {
