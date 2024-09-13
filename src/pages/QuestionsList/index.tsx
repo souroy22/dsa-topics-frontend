@@ -50,6 +50,7 @@ const QuestionsList: FC = () => {
   const { questions } = useSelector(
     (state: RootState) => state.questionReducer
   );
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const params = useParams();
   const topicSlug = params.slug;
@@ -275,15 +276,17 @@ const QuestionsList: FC = () => {
           handleSearchChange={handleSearchChange}
           handleDifficultyChange={handleDifficultyChange}
         />
-        <Box>
-          <Tooltip title="Add">
-            <CirclePlus
-              onClick={() => setOpen(true)}
-              size={35}
-              cursor="pointer"
-            />
-          </Tooltip>
-        </Box>
+        {user?.role === "ADMIN" && (
+          <Box>
+            <Tooltip title="Add">
+              <CirclePlus
+                onClick={() => setOpen(true)}
+                size={35}
+                cursor="pointer"
+              />
+            </Tooltip>
+          </Box>
+        )}
       </Box>
       <Box>
         <Tabs

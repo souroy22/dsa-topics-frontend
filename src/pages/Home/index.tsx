@@ -26,6 +26,8 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const { topics } = useSelector((state: RootState) => state.topicReducer);
+  const { user } = useSelector((state: RootState) => state.userReducer);
+
   const { selectedSidebarOption } = useSelector(
     (state: RootState) => state.globalReducer
   );
@@ -193,15 +195,17 @@ const Home = () => {
           }}
           sx={{ width: "350px" }}
         />
-        <Box>
-          <Tooltip title="Add">
-            <CirclePlus
-              onClick={() => setOpen(true)}
-              size={35}
-              cursor="pointer"
-            />
-          </Tooltip>
-        </Box>
+        {user?.role === "ADMIN" && (
+          <Box>
+            <Tooltip title="Add">
+              <CirclePlus
+                onClick={() => setOpen(true)}
+                size={35}
+                cursor="pointer"
+              />
+            </Tooltip>
+          </Box>
+        )}
       </Box>
       <Box id="topics-container">
         {topics === null ? (
