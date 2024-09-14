@@ -58,7 +58,7 @@ const Home = () => {
       const isCompleted =
         selectedSidebarOption === "all"
           ? undefined
-          : selectedSidebarOption === "pending";
+          : selectedSidebarOption === "completed";
       const result = await getAllTopics(
         currentPage + 1,
         isCompleted,
