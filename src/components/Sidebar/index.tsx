@@ -1,4 +1,3 @@
-// components/Sidebar.tsx
 import {
   Box,
   List,
@@ -9,8 +8,10 @@ import {
   Avatar,
   Typography,
   Switch,
+  Drawer,
+  IconButton,
 } from "@mui/material";
-import { LogOut, Moon, SunMedium } from "lucide-react";
+import { LogOut, Moon, SunMedium, Menu } from "lucide-react";
 import { customLocalStorage } from "../../utils/customLocalStorage";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,8 +19,9 @@ import { setUserData } from "../../store/user/userReducer";
 import { RootState } from "../../store/store";
 import useThemeMode from "../../hooks/useThemeMode";
 import { sidebarOptions } from "../../constants/sidebarOptions";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { setSelectedSidebarOption } from "../../store/global/globalReducer";
+import { useMediaQuery } from "@mui/material";
 import "./style.css";
 
 const Sidebar: FC = () => {
@@ -29,9 +31,11 @@ const Sidebar: FC = () => {
   );
   const { toggleTheme } = useThemeMode();
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const currentTheme = theme === "dark";
 
   const handleSignout = () => {
@@ -42,9 +46,12 @@ const Sidebar: FC = () => {
 
   const handleClick = (value: string) => {
     dispatch(setSelectedSidebarOption(value));
+    if (isMobile) {
+      setIsDrawerOpen(false); // Close drawer on mobile after selecting an option
+    }
   };
 
-  return (
+  const sidebarContent = (
     <Box
       sx={{
         height: "100vh",
@@ -118,6 +125,7 @@ const Sidebar: FC = () => {
       <List>
         {sidebarOptions.map(({ title, IconComponent, value }) => (
           <ListItem
+            key={value}
             disablePadding
             onClick={() => handleClick(value)}
             className={`${
@@ -147,6 +155,30 @@ const Sidebar: FC = () => {
         </ListItemButton>
       </ListItem>
     </Box>
+  );
+
+  return (
+    <>
+      {isMobile ? (
+        <>
+          <IconButton
+            onClick={() => setIsDrawerOpen(true)}
+            sx={{ position: "absolute", top: 10, left: 10 }}
+          >
+            <Menu size={24} />
+          </IconButton>
+          <Drawer
+            anchor="left"
+            open={isDrawerOpen}
+            onClose={() => setIsDrawerOpen(false)}
+          >
+            {sidebarContent}
+          </Drawer>
+        </>
+      ) : (
+        <Box>{sidebarContent}</Box>
+      )}
+    </>
   );
 };
 

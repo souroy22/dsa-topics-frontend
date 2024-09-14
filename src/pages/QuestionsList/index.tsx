@@ -248,7 +248,12 @@ const QuestionsList: FC = () => {
   }
 
   return (
-    <Box sx={{ padding: "30px", width: "calc(100svw - 250px)" }}>
+    <Box
+      sx={{
+        padding: "30px",
+        width: { xs: "100svw", md: "calc(100svw - 250px)" },
+      }}
+    >
       <Popup
         open={open}
         onClose={() => {

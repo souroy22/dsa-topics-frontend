@@ -37,7 +37,16 @@ const QuestionsFilter: FC<PropTypes> = ({
   };
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="flex-end" gap={2}>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="flex-end"
+      gap={2}
+      sx={{
+        flexDirection: { xs: "column", md: "row" },
+        marginTop: { xs: "30px", md: "0" },
+      }}
+    >
       {/* Search Bar */}
       <TextField
         variant="outlined"

@@ -40,7 +40,7 @@ const Home = () => {
         selectedSidebarOption === "all"
           ? undefined
           : selectedSidebarOption === "completed";
-      const result = await getAllTopics(currentPage, isCompleted);
+      const result = await getAllTopics(1, isCompleted);
       setCurrentPage(result.page);
       setTotalPages(result.totalPages);
       dispatch(setTopics(result.data));
@@ -147,7 +147,12 @@ const Home = () => {
   }, [selectedSidebarOption]);
 
   return (
-    <Box sx={{ padding: "30px", width: "calc(100svw - 200px)" }}>
+    <Box
+      sx={{
+        padding: "30px",
+        width: { xs: "100svw", md: "calc(100svw - 200px)" },
+      }}
+    >
       <Popup
         open={open}
         onClose={() => {
