@@ -9,14 +9,16 @@ import {
   ListItemIcon,
   Button,
   Menu,
+  IconButton,
 } from "@mui/material";
-import { Filter, SearchIcon } from "lucide-react";
+import { Filter, Search, X } from "lucide-react";
 
 type PropTypes = {
   searchTerm: string;
   difficulty: string[];
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDifficultyChange: (value: string) => void;
+  handleClearSearch?: () => void;
 };
 
 const QuestionsFilter: FC<PropTypes> = ({
@@ -24,6 +26,7 @@ const QuestionsFilter: FC<PropTypes> = ({
   difficulty,
   handleSearchChange,
   handleDifficultyChange,
+  handleClearSearch,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -55,9 +58,16 @@ const QuestionsFilter: FC<PropTypes> = ({
         value={searchTerm}
         onChange={handleSearchChange}
         InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
+          endAdornment: (
+            <InputAdornment position="end">
+              {searchTerm && (
+                <IconButton
+                  onClick={() => handleClearSearch && handleClearSearch()}
+                >
+                  <X />
+                </IconButton>
+              )}
+              <Search />
             </InputAdornment>
           ),
         }}

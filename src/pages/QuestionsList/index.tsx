@@ -245,6 +245,11 @@ const QuestionsList: FC = () => {
     }
   };
 
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    debounceSearchQuestions("");
+  };
+
   useEffect(() => {
     onLoad();
   }, [topicSlug]);
@@ -289,6 +294,7 @@ const QuestionsList: FC = () => {
           difficulty={difficulty}
           handleSearchChange={handleSearchChange}
           handleDifficultyChange={handleDifficultyChange}
+          handleClearSearch={handleClearSearch}
         />
         {user?.role === "ADMIN" && (
           <Box>
