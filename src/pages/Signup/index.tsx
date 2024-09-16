@@ -116,9 +116,9 @@ const Signup = () => {
           onClick={() => handleSubmit(handleSignup)}
         />
       </form>
-      <span>
+      <Box sx={{ color: "gray", marginTop: "10px", textAlign: "center" }}>
         Click here to <Link to="/signin">login</Link>
-      </span>
+      </Box>
     </Box>
   );
 };

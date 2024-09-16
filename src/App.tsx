@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "./api/user.api";
 import { setUserData } from "./store/user/userReducer";
 import { RootState } from "./store/store";
+import { setUserTheme } from "./store/global/globalReducer";
+import { customLocalStorage } from "./utils/customLocalStorage";
 
 const App: FC = () => {
   const { theme } = useSelector((state: RootState) => state.globalReducer);
@@ -25,6 +27,12 @@ const App: FC = () => {
   });
 
   const onLoad = async () => {
+    const theme = customLocalStorage.getData("userTheme");
+    if (theme) {
+      dispatch(setUserTheme(theme));
+    } else {
+      dispatch(setUserTheme("light"));
+    }
     try {
       const result = await getUserData();
       dispatch(setUserData(result.user));

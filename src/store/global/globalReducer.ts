@@ -7,7 +7,7 @@ type GlobalStateType = {
 };
 
 const initialState: GlobalStateType = {
-  theme: "light",
+  theme: "dark",
   selectedSidebarOption: "pending",
 };
 

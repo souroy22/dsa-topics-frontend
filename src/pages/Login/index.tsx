@@ -92,14 +92,13 @@ const Login = () => {
           loading={loading}
           fullWidth
           type="submit"
-          disabled={loading}
           variant="contained"
           onClick={() => handleSubmit(handleLogin)}
         />
       </form>
-      <span>
+      <Box sx={{ color: "gray", marginTop: "10px", textAlign: "center" }}>
         Click here to <Link to="/signup">signup</Link>
-      </span>
+      </Box>
     </Box>
   );
 };
