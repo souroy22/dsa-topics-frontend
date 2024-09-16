@@ -1,6 +1,12 @@
-import { Box, InputAdornment, TextField, Tooltip } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import TaskCard from "../../components/TaskCard";
-import { CirclePlus, Search } from "lucide-react";
+import { CirclePlus, Search, X } from "lucide-react";
 import "./style.css";
 import { ChangeEvent, useEffect, useState } from "react";
 import { getAllTopics, updateTopic } from "../../api/topic.api";
@@ -142,6 +148,11 @@ const Home = () => {
     }
   };
 
+  const clearSearch = () => {
+    setSearchValue("");
+    debounceGetData("");
+  };
+
   const onChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -195,7 +206,12 @@ const Home = () => {
           placeholder="search..."
           InputProps={{
             endAdornment: (
-              <InputAdornment position="start">
+              <InputAdornment position="end">
+                {searchValue && (
+                  <IconButton onClick={clearSearch}>
+                    <X />
+                  </IconButton>
+                )}
                 <Search />
               </InputAdornment>
             ),
