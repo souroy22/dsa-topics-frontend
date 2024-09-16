@@ -149,6 +149,7 @@ const QuestionsList: FC = () => {
   };
 
   const onLoad = async () => {
+    dispatch(setQuestions(null));
     setLoading(true);
     try {
       if (topicSlug) {
