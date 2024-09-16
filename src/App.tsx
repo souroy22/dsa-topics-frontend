@@ -36,8 +36,10 @@ const App: FC = () => {
     try {
       const result = await getUserData();
       dispatch(setUserData(result.user));
-    } catch (error) {
-      if (error instanceof Error) {
+    } catch (error: any) {
+      if (error.response.status) {
+        console.log("error", error.message);
+      } else if (error instanceof Error) {
         notification.error(error.message);
       }
     }

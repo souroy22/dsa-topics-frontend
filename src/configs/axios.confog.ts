@@ -43,8 +43,7 @@ const createAxiosInstance = (): AxiosInstance => {
     (error: AxiosError<ErrorResponseData>) => {
       if (error.response) {
         if (error.response.status === 401) {
-          customLocalStorage.deleteData("user-token");
-          // notification.error(error.response.data.error);
+          customLocalStorage.deleteData("token");
           error.message = error.response.data.error;
           return Promise.reject(error);
         }
