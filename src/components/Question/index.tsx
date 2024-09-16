@@ -156,8 +156,7 @@ const Question: FC<PropTypes> = ({
             />
           </Tooltip>
 
-          {/* Admin Actions: Edit and Delete buttons are hidden on mobile */}
-          {!isMobile && user?.role === "ADMIN" && (
+          {user?.role === "ADMIN" && (
             <>
               <IconButton
                 aria-label="edit"
