@@ -7,6 +7,8 @@ import {
   IconButton,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { QUESTION_TYPE } from "../../store/question/questionReducer";
 import {
@@ -39,55 +41,99 @@ const Question: FC<PropTypes> = ({
   onClickUpdate,
 }) => {
   const { user } = useSelector((state: RootState) => state.userReducer);
+  const { theme } = useSelector((state: RootState) => state.globalReducer);
+
+  const muiTheme = useTheme();
+
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
 
   return (
     <Card
       key={question.slug}
       sx={{
         width: "100%",
-        height: "100px",
         cursor: "pointer",
+        padding: "10px",
+        marginBottom: "10px",
+        height: "max-content",
       }}
     >
       <CardContent
         sx={{
           display: "flex",
-          gap: "20px",
+          gap: "10px",
           alignItems: "center",
-          flexWrap: "wrap",
+          flexWrap: isMobile ? "wrap" : "nowrap", // Wrap content on mobile
+          padding: "10px", // Compact padding
+          "&:last-child": {
+            paddingBottom: "10px", // Ensure padding consistency
+          },
         }}
       >
-        <Typography variant="h6" width={"40%"}>
-          {question.title}
-        </Typography>
-        <Typography
-          variant="body2"
-          width={"10%"}
-          color={levelColor[question.level]}
+        {/* Title and Level */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row", // Stack on mobile
+            gap: isMobile ? "5px" : "20px",
+            width: isMobile ? "100%" : "40%",
+            alignItems: isMobile ? "flex-start" : "center",
+          }}
         >
-          {question.level}
-        </Typography>
-        <Box sx={{ display: "flex", gap: "20px", width: "20%" }}>
-          {question.youtubeLink && (
-            <a href={question.youtubeLink} target="_blank">
-              <Youtube color="#a30000" />
-            </a>
-          )}
-          {question.articleLink && (
-            <a href={question.articleLink} target="_blank">
-              <Newspaper color="#f7f7f7" />
-            </a>
-          )}
-          {question.leetcodeLink && (
-            <a href={question.leetcodeLink} target="_blank">
-              <SiLeetcode color="#FFF" />
-            </a>
-          )}
+          <Typography variant="h6" noWrap>
+            {question.title}
+          </Typography>
+          <Typography
+            variant="body2"
+            color={levelColor[question.level]}
+            sx={{
+              fontWeight: "bold",
+            }}
+          >
+            {question.level}
+          </Typography>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", width: "20%" }}>
+
+        {/* Links (shown/hidden based on screen size) */}
+        {!isMobile && (
+          <Box
+            sx={{
+              display: "flex",
+              gap: "10px",
+              width: "20%",
+              justifyContent: "center",
+            }}
+          >
+            {question.youtubeLink && (
+              <a href={question.youtubeLink} target="_blank">
+                <Youtube color="#a30000" />
+              </a>
+            )}
+            {question.articleLink && (
+              <a href={question.articleLink} target="_blank">
+                <Newspaper color={theme === "dark" ? "#f7f7f7" : "blue"} />
+              </a>
+            )}
+            {question.leetcodeLink && (
+              <a href={question.leetcodeLink} target="_blank">
+                <SiLeetcode color="#FFF" />
+              </a>
+            )}
+          </Box>
+        )}
+
+        {/* Status Chip and Admin Buttons */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            width: isMobile ? "100%" : "20%",
+            alignItems: "center",
+          }}
+        >
           <Tooltip
             title={`Click to mark ${
-              question.completed ? "Incompleted" : "Complete"
+              question.completed ? "Incomplete" : "Complete"
             }`}
             arrow
           >
@@ -109,34 +155,32 @@ const Question: FC<PropTypes> = ({
               }}
             />
           </Tooltip>
-          {user?.role === "ADMIN" && (
-            <IconButton
-              aria-label="delete"
-              sx={{ ml: 1 }}
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-              }}
-            >
-              <Tooltip title="Edit" arrow>
-                <SquarePen
-                  size={20}
-                  color="#FFFF00"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    onClickUpdate(question.slug, question.title);
-                  }}
-                />
-              </Tooltip>
-            </IconButton>
-          )}
-          {user?.role === "ADMIN" && (
-            <IconButton aria-label="delete" sx={{ ml: 1 }}>
-              <Tooltip title="Delete" arrow>
-                <Trash2 size={20} color="#990000" />
-              </Tooltip>
-            </IconButton>
+
+          {/* Admin Actions: Edit and Delete buttons are hidden on mobile */}
+          {!isMobile && user?.role === "ADMIN" && (
+            <>
+              <IconButton
+                aria-label="edit"
+                sx={{ ml: 1 }}
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  onClickUpdate(question.slug, question.title);
+                }}
+              >
+                <Tooltip title="Edit" arrow>
+                  <SquarePen
+                    size={20}
+                    color={theme === "dark" ? "#FFFF00" : "gold"}
+                  />
+                </Tooltip>
+              </IconButton>
+              <IconButton aria-label="delete" sx={{ ml: 1 }}>
+                <Tooltip title="Delete" arrow>
+                  <Trash2 size={20} color="#990000" />
+                </Tooltip>
+              </IconButton>
+            </>
           )}
         </Box>
       </CardContent>

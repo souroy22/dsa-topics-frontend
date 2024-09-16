@@ -1,5 +1,5 @@
 import { CSSProperties, FC } from "react";
-import { Box, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 
 type PropTypes = {
   count?: number;
@@ -17,7 +17,7 @@ const SkeletonComponent: FC<PropTypes> = ({
   style = {},
 }) => {
   return (
-    <Box sx={{ display: "flex", gap: "30px", flexWrap: "wrap" }}>
+    <>
       {[...Array(count)].map((_, i) => (
         <Skeleton
           key={i}
@@ -27,7 +27,7 @@ const SkeletonComponent: FC<PropTypes> = ({
           sx={style}
         />
       ))}
-    </Box>
+    </>
   );
 };
 

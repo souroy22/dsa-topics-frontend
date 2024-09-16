@@ -46,6 +46,7 @@ const Sidebar: FC = () => {
 
   const handleClick = (value: string) => {
     dispatch(setSelectedSidebarOption(value));
+    navigate("/");
     if (isMobile) {
       setIsDrawerOpen(false); // Close drawer on mobile after selecting an option
     }

@@ -1,5 +1,5 @@
 import { useState, useEffect, FC } from "react";
-import { Box, Tab, Tabs, Tooltip, Typography } from "@mui/material";
+import { Box, Tab, Tabs, Tooltip } from "@mui/material";
 import QuestionsFilter from "../../components/QuestionsFilter";
 import Question from "../../components/Question";
 import { useDispatch, useSelector } from "react-redux";
@@ -208,12 +208,19 @@ const QuestionsList: FC = () => {
   const updateStatus = async (isCompleted: boolean, slug: string) => {
     let updatedData: any = null;
     try {
-      const updatedQuestions: any = questions?.map((question) => {
-        if (question.slug === slug) {
-          return { ...question, completed: isCompleted };
-        }
-        return question;
-      });
+      let updatedQuestions: any;
+      if (value === "all") {
+        updatedQuestions = questions?.map((question) => {
+          if (question.slug === slug) {
+            return { ...question, completed: isCompleted };
+          }
+          return question;
+        });
+      } else {
+        updatedQuestions = questions?.filter(
+          (question) => question.slug !== slug
+        );
+      }
       dispatch(setQuestions(updatedQuestions));
       updatedData = await updateQuestion({ completed: isCompleted }, slug);
       notification.success("Question status updated successfully!");
@@ -305,11 +312,19 @@ const QuestionsList: FC = () => {
         </Tabs>
       </Box>
       {questions === null ? (
-        <Box sx={{ padding: "30px" }}>
+        <Box
+          sx={{
+            padding: "30px",
+            display: "flex",
+            gap: "30px",
+            flexWrap: "wrap",
+            flexDirection: "column",
+          }}
+        >
           <SkeletonComponent
-            count={8}
-            height={150}
-            width={250}
+            count={4}
+            height={100}
+            width="100%"
             style={{ borderRadius: "10px" }}
           />
         </Box>
@@ -326,11 +341,13 @@ const QuestionsList: FC = () => {
             padding: "40px",
             flexWrap: "wrap",
             height: "calc(100svh - 100px)",
+            justifyContent: "flex-start",
           }}
           LoadingComponent={<></>}
         >
           {questions.map((question) => (
             <Question
+              key={question.slug}
               question={question}
               handleUpdateStatus={async () => {
                 await updateStatus(!question.completed, question.slug);
@@ -354,13 +371,25 @@ const QuestionsList: FC = () => {
           {loading && (
             <SkeletonComponent
               count={4}
-              height={150}
+              height={100}
+              width="100%"
               style={{ borderRadius: "10px" }}
             />
           )}
         </InfiniteScrollComponent>
       ) : (
-        <Typography>No questions found</Typography>
+        <Box
+          sx={{
+            height: "calc(100svh - 100px)",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          No Topic found!
+        </Box>
       )}
     </Box>
   );

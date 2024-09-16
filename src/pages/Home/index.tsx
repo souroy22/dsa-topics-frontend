@@ -54,6 +54,7 @@ const Home = () => {
   };
 
   const loadMoreData = async () => {
+    setIsLoading(true);
     try {
       const isCompleted =
         selectedSidebarOption === "all"
@@ -106,13 +107,18 @@ const Home = () => {
   const handleUpdateStatus = async (status: boolean, slug: string) => {
     let updatedTopic: any = null;
     try {
+      let updatedTopics: any;
       if (topics?.length) {
-        const updatedTopics = topics?.map((topic) => {
-          if (topic.slug === slug) {
-            return { ...topic, isCompleted: status };
-          }
-          return topic;
-        });
+        if (selectedSidebarOption === "all") {
+          updatedTopics = topics?.map((topic) => {
+            if (topic.slug === slug) {
+              return { ...topic, isCompleted: status };
+            }
+            return topic;
+          });
+        } else {
+          updatedTopics = topics?.filter((topic) => topic.slug !== slug);
+        }
         dispatch(setTopics(updatedTopics));
         updatedTopic = await updateTopic({ completed: status }, slug);
         notification.success("Topic Status updated successfully!");
@@ -214,7 +220,14 @@ const Home = () => {
       </Box>
       <Box id="topics-container">
         {topics === null ? (
-          <Box sx={{ padding: "30px" }}>
+          <Box
+            sx={{
+              padding: "30px",
+              display: "flex",
+              gap: "30px",
+              flexWrap: "wrap",
+            }}
+          >
             <SkeletonComponent
               count={8}
               height={150}
