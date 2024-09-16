@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { FC, ReactNode } from "react";
+import AUTH_IMAGE from "../../assets/images/undraw_authentication_re_svpt.svg";
 import "./style.css";
 
 type PropTypes = {
@@ -8,24 +9,11 @@ type PropTypes = {
 
 const AuthLayout: FC<PropTypes> = ({ children }) => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexWrap: "wrap",
-        height: "100svh",
-      }}
-    >
-      <Box
-        sx={{
-          boxShadow: "0 0 10px gray",
-          padding: "20px",
-          borderRadius: "10px",
-        }}
-      >
-        {children}
+    <Box className="auth-layout">
+      <Box className="auth-layout-img">
+        <img src={AUTH_IMAGE} alt="Authentication Illustration" />
       </Box>
+      <Box className="auth-form">{children}</Box>
     </Box>
   );
 };
