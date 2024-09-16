@@ -4,6 +4,8 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 import { customLocalStorage } from "../utils/customLocalStorage";
+import store from "../store/store";
+import { setUserData } from "../store/user/userReducer";
 
 interface ErrorResponseData {
   error: string;
@@ -44,6 +46,7 @@ const createAxiosInstance = (): AxiosInstance => {
       if (error.response) {
         if (error.response.status === 401) {
           customLocalStorage.deleteData("token");
+          store.dispatch(setUserData(null));
           error.message = error.response.data.error;
           return Promise.reject(error);
         }
