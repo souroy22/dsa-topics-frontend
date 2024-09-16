@@ -165,6 +165,7 @@ const QuestionsList: FC = () => {
         dispatch(setQuestions(result.data));
       }
     } catch (error) {
+      dispatch(setQuestions([]));
       if (error instanceof Error) {
         notification.error(error.message);
       }
