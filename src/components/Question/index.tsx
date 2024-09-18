@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   Box,
   Card,
@@ -10,7 +10,10 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { QUESTION_TYPE } from "../../store/question/questionReducer";
+import {
+  QUESTION_TYPE,
+  setQuestions,
+} from "../../store/question/questionReducer";
 import {
   CheckCircle,
   CircleX,
@@ -20,8 +23,11 @@ import {
   Youtube,
 } from "lucide-react";
 import { SiLeetcode } from "react-icons/si";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import { deleteQuestion } from "../../api/question.api";
+import DeleteConfirmationDialog from "../DeleteConfirmationDialog";
+import { notification } from "../../configs/notification.config";
 
 type PropTypes = {
   question: QUESTION_TYPE;
@@ -40,12 +46,42 @@ const Question: FC<PropTypes> = ({
   handleUpdateStatus,
   onClickUpdate,
 }) => {
+  const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const { user } = useSelector((state: RootState) => state.userReducer);
   const { theme } = useSelector((state: RootState) => state.globalReducer);
+  const { questions } = useSelector(
+    (state: RootState) => state.questionReducer
+  );
 
   const muiTheme = useTheme();
+  const dispatch = useDispatch();
 
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
+
+  const onClose = () => {
+    setOpenDeleteConfirm(false);
+  };
+
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      await deleteQuestion(question.slug);
+      const updatedQuestions = questions?.filter(
+        (qsn) => qsn.slug !== question.slug
+      );
+      dispatch(setQuestions(updatedQuestions ?? []));
+      notification.success("Question deleted successfully!");
+      setOpenDeleteConfirm(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        notification.error(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Card
@@ -58,6 +94,12 @@ const Question: FC<PropTypes> = ({
         height: "max-content",
       }}
     >
+      <DeleteConfirmationDialog
+        onClose={onClose}
+        open={openDeleteConfirm}
+        onDelete={handleDelete}
+        loading={loading}
+      />
       <CardContent
         sx={{
           display: "flex",
@@ -176,7 +218,11 @@ const Question: FC<PropTypes> = ({
               </IconButton>
               <IconButton aria-label="delete" sx={{ ml: 1 }}>
                 <Tooltip title="Delete" arrow>
-                  <Trash2 size={20} color="#990000" />
+                  <Trash2
+                    size={20}
+                    color="#990000"
+                    onClick={() => setOpenDeleteConfirm(true)}
+                  />
                 </Tooltip>
               </IconButton>
             </>

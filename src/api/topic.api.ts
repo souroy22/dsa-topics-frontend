@@ -34,3 +34,11 @@ export const createTopic = async (data: any) => {
   }
   return res.data;
 };
+
+export const deleteTopic = async (slug: string) => {
+  const res: any = await AXIOS.delete(`/topic/delete/${slug}`);
+  if (res.data.error) {
+    return Promise.reject(res.data.error);
+  }
+  return res.data;
+};

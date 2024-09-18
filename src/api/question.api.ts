@@ -31,6 +31,8 @@ export const getQuestions = async (
 };
 
 export const createQuestion = async (data: any) => {
+  data = { ...data, topicSlug: data.topic.slug };
+  delete data["topic"];
   const res: any = await AXIOS.post("/question/create", {
     ...data,
   });
@@ -44,6 +46,14 @@ export const updateQuestion = async (data: any, slug: string) => {
   const res: any = await AXIOS.patch(`/question/update/${slug}`, {
     ...data,
   });
+  if (res.data.error) {
+    return Promise.reject(res.data.error);
+  }
+  return res.data;
+};
+
+export const deleteQuestion = async (slug: string) => {
+  const res: any = await AXIOS.delete(`/question/delete/${slug}`);
   if (res.data.error) {
     return Promise.reject(res.data.error);
   }

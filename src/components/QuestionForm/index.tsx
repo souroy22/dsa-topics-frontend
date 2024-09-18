@@ -8,6 +8,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  CircularProgress,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { notification } from "../../configs/notification.config";
@@ -47,6 +48,7 @@ type QuestionFormProps = {
   formData: DATA_TYPE;
   onChange: (name: string, value: string) => void;
   handleSelectTopic: (value: OPTION_TOPIC_TYPE | null) => void;
+  clearForm?: () => void;
 };
 
 const QuestionForm: FC<QuestionFormProps> = ({
@@ -56,11 +58,13 @@ const QuestionForm: FC<QuestionFormProps> = ({
   slug = null,
   onChange,
   handleSelectTopic,
+  clearForm,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
+  const [formSubmitLoading, setFormSubmitLoading] = useState(false);
   const [topics, setTopics] = useState<OPTION_TOPIC_TYPE[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<OPTION_TOPIC_TYPE | null>(
     null
@@ -74,6 +78,7 @@ const QuestionForm: FC<QuestionFormProps> = ({
   );
 
   const handleFormSubmit = async () => {
+    setFormSubmitLoading(true);
     try {
       if (mode === "CREATE") {
         const newQuestion = await createQuestion(formData);
@@ -100,12 +105,14 @@ const QuestionForm: FC<QuestionFormProps> = ({
           notification.success("Question updated successfully!");
         }
       }
+      onClose();
+      clearForm && clearForm();
     } catch (error) {
       if (error instanceof Error) {
         notification.error(error.message);
       }
     } finally {
-      onClose();
+      setFormSubmitLoading(false);
     }
   };
 
@@ -294,9 +301,21 @@ const QuestionForm: FC<QuestionFormProps> = ({
           color="primary"
           fullWidth
           onClick={handleFormSubmit}
-          disabled={isDisabled()} // Disable button when loading
+          disabled={isDisabled()}
         >
-          {mode === "CREATE" ? "ADD Topic" : "UPDATE Topic"}
+          {formSubmitLoading ? (
+            <CircularProgress
+              sx={{
+                color: "white",
+                width: "25px !important",
+                height: "25px !important",
+              }}
+            />
+          ) : mode === "CREATE" ? (
+            "ADD Topic"
+          ) : (
+            "UPDATE Topic"
+          )}
         </Button>
       </Box>
     </Box>

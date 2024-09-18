@@ -250,6 +250,10 @@ const QuestionsList: FC = () => {
     debounceSearchQuestions("");
   };
 
+  const clearForm = () => {
+    setFormaData(initialFormData);
+  };
+
   useEffect(() => {
     onLoad();
   }, [topicSlug]);
@@ -286,6 +290,7 @@ const QuestionsList: FC = () => {
             setMode(null);
           }}
           slug={updatingSlug}
+          clearForm={clearForm}
         />
       </Popup>
       <Box display="flex" gap="20px" justifyContent="flex-end">
@@ -348,7 +353,8 @@ const QuestionsList: FC = () => {
             gap: "10px",
             padding: "40px",
             flexWrap: "wrap",
-            height: "calc(100svh - 100px)",
+            height: "auto",
+            maxHeight: "calc(100svh - 100px)",
             justifyContent: "flex-start",
           }}
           LoadingComponent={<></>}
