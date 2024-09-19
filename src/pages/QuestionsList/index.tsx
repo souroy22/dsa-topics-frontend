@@ -17,6 +17,7 @@ import QuestionForm, {
   OPTION_TOPIC_TYPE,
 } from "../../components/QuestionForm";
 import useDebounce from "../../hooks/useDebounce";
+import { questionsTabOptions } from "../../constants/questionsTabOptions";
 
 interface Question {
   _id: string;
@@ -319,9 +320,13 @@ const QuestionsList: FC = () => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="All" value="all" {...a11yProps(0)} />
-          <Tab label="Incomplete" value="pending" {...a11yProps(1)} />
-          <Tab label="Completed" value="completed" {...a11yProps(2)} />
+          {questionsTabOptions.map((tabOption, index) => (
+            <Tab
+              label={tabOption.label}
+              value={tabOption.value}
+              {...a11yProps(index)}
+            />
+          ))}
         </Tabs>
       </Box>
       {questions === null ? (
@@ -359,9 +364,10 @@ const QuestionsList: FC = () => {
           }}
           LoadingComponent={<></>}
         >
-          {questions.map((question) => (
+          {questions.map((question, index) => (
             <Question
               key={question.slug}
+              index={index}
               question={question}
               handleUpdateStatus={async () => {
                 await updateStatus(!question.completed, question.slug);

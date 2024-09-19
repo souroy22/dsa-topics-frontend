@@ -31,6 +31,7 @@ import { notification } from "../../configs/notification.config";
 
 type PropTypes = {
   question: QUESTION_TYPE;
+  index: number;
   handleUpdateStatus: (status: boolean, slug: string) => void;
   onClickUpdate: (slug: string, title: string) => void;
 };
@@ -43,6 +44,7 @@ const levelColor = {
 
 const Question: FC<PropTypes> = ({
   question,
+  index,
   handleUpdateStatus,
   onClickUpdate,
 }) => {
@@ -92,6 +94,14 @@ const Question: FC<PropTypes> = ({
         padding: "10px",
         marginBottom: "10px",
         height: "max-content",
+        backgroundColor:
+          index % 2 === 0
+            ? muiTheme.palette.mode === "dark"
+              ? "transparent"
+              : "#c9c9c9"
+            : muiTheme.palette.mode === "dark"
+            ? "#2A2A2A"
+            : "#eaeaea",
       }}
     >
       <DeleteConfirmationDialog
@@ -105,35 +115,34 @@ const Question: FC<PropTypes> = ({
           display: "flex",
           gap: "10px",
           alignItems: "center",
-          flexWrap: isMobile ? "wrap" : "nowrap", // Wrap content on mobile
-          padding: "10px", // Compact padding
+          flexWrap: isMobile ? "wrap" : "nowrap",
+          padding: "10px",
           "&:last-child": {
-            paddingBottom: "10px", // Ensure padding consistency
+            paddingBottom: "10px",
           },
+          justifyContent: "space-between",
         }}
       >
-        {/* Title and Level */}
         <Box
           sx={{
             display: "flex",
-            flexDirection: isMobile ? "column" : "row", // Stack on mobile
+            flexDirection: isMobile ? "column" : "row",
             gap: isMobile ? "5px" : "20px",
-            width: isMobile ? "100%" : "40%",
+            width: isMobile ? "100%" : "50%",
             alignItems: isMobile ? "flex-start" : "center",
+            justifyContent: "space-between",
           }}
         >
           <Typography variant="h6" noWrap>
             {question.title}
           </Typography>
-          <Typography
-            variant="body2"
-            color={levelColor[question.level]}
+          <Chip
+            label={question.level}
             sx={{
               fontWeight: "bold",
+              backgroundColor: levelColor[question.level],
             }}
-          >
-            {question.level}
-          </Typography>
+          />
         </Box>
 
         {/* Links (shown/hidden based on screen size) */}
