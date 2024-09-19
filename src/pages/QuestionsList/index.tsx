@@ -1,5 +1,12 @@
 import { useState, useEffect, FC } from "react";
-import { Box, Tab, Tabs, Tooltip } from "@mui/material";
+import {
+  Box,
+  Tab,
+  Tabs,
+  Tooltip,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import QuestionsFilter from "../../components/QuestionsFilter";
 import Question from "../../components/Question";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,6 +63,8 @@ const QuestionsList: FC = () => {
   const params = useParams();
   const topicSlug = params.slug;
   const dispatch = useDispatch();
+  const muiTheme = useTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
 
   const handleChange = async (_: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -322,6 +331,7 @@ const QuestionsList: FC = () => {
         >
           {questionsTabOptions.map((tabOption, index) => (
             <Tab
+              key={tabOption.value}
               label={tabOption.label}
               value={tabOption.value}
               {...a11yProps(index)}
@@ -356,7 +366,7 @@ const QuestionsList: FC = () => {
             width: "100%",
             display: "flex",
             gap: "10px",
-            padding: "40px",
+            padding: !isMobile ? "40px" : "5px",
             flexWrap: "wrap",
             height: "auto",
             maxHeight: "calc(100svh - 100px)",

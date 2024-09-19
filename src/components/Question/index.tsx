@@ -133,7 +133,11 @@ const Question: FC<PropTypes> = ({
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h6" noWrap>
+          <Typography
+            variant="h6"
+            noWrap
+            sx={{ textOverflow: "ellipsis", width: "100%" }}
+          >
             {question.title}
           </Typography>
           <Chip
@@ -144,34 +148,30 @@ const Question: FC<PropTypes> = ({
             }}
           />
         </Box>
-
-        {/* Links (shown/hidden based on screen size) */}
-        {!isMobile && (
-          <Box
-            sx={{
-              display: "flex",
-              gap: "10px",
-              width: "20%",
-              justifyContent: "center",
-            }}
-          >
-            {question.youtubeLink && (
-              <a href={question.youtubeLink} target="_blank">
-                <Youtube color="#a30000" />
-              </a>
-            )}
-            {question.articleLink && (
-              <a href={question.articleLink} target="_blank">
-                <Newspaper color={theme === "dark" ? "#f7f7f7" : "blue"} />
-              </a>
-            )}
-            {question.leetcodeLink && (
-              <a href={question.leetcodeLink} target="_blank">
-                <SiLeetcode color="#FFF" />
-              </a>
-            )}
-          </Box>
-        )}
+        <Box
+          sx={{
+            display: "flex",
+            gap: "10px",
+            width: "20%",
+            justifyContent: "center",
+          }}
+        >
+          {question.youtubeLink && (
+            <a href={question.youtubeLink} target="_blank">
+              <Youtube color="#a30000" />
+            </a>
+          )}
+          {question.articleLink && (
+            <a href={question.articleLink} target="_blank">
+              <Newspaper color={theme === "dark" ? "#f7f7f7" : "blue"} />
+            </a>
+          )}
+          {question.leetcodeLink && (
+            <a href={question.leetcodeLink} target="_blank">
+              <SiLeetcode color="#FFF" />
+            </a>
+          )}
+        </Box>
 
         {/* Status Chip and Admin Buttons */}
         <Box

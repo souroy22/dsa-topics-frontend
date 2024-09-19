@@ -18,6 +18,7 @@ import InfiniteScrollDropdown from "../InfiniteScrollDropdown";
 import { getAllTopics } from "../../api/topic.api";
 import { setQuestions } from "../../store/question/questionReducer";
 import useDebounce from "../../hooks/useDebounce";
+import { useParams } from "react-router-dom";
 
 export type LEVEL_TYPE = "EASY" | "MEDIUM" | "HARD";
 export type OPTION_TOPIC_TYPE = {
@@ -76,6 +77,8 @@ const QuestionForm: FC<QuestionFormProps> = ({
   const { questions } = useSelector(
     (state: RootState) => state.questionReducer
   );
+
+  const { slug: questionSlug } = useParams();
 
   const handleFormSubmit = async () => {
     setFormSubmitLoading(true);
@@ -149,6 +152,17 @@ const QuestionForm: FC<QuestionFormProps> = ({
       setTopics(result.data);
       if (mode === "UPDATE") {
         setSelectedTopic(formData.topic);
+      } else {
+        if (questionSlug) {
+          const isExist = result.data.find(
+            (topic: any) => topic.slug === questionSlug
+          );
+          console.log("isExist", isExist);
+          if (isExist) {
+            setSelectedTopic(isExist);
+            handleSelectTopic(isExist);
+          }
+        }
       }
     } catch (error) {
       if (error instanceof Error) {
